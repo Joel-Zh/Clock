@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script>
+        window.onload = function () {//页面加载完成之后
+            setInterval(oCAN, 1000);
+
+        }
+        function oCAN(){
+            //获取到系统的时分秒
+            var oData = new Date();
+            var oHours=  oData.getHours();//时
+            var oMin=  oData.getMinutes();//分
+            var oSec = oData.getSeconds();//秒
+
+            //换算成弧度
+            var oHoursValue = (-90 + oHours * 30) * Math.PI / 180;
+            var oMinValue = (-90 + oMin * 6) * Math.PI / 180;
+            var oSecValue = (-90 + oSec * 6) * Math.PI / 180;
+
+            //  1.找到canvas
+            var oc = document.getElementById("myCan");//演员
+            //2.绘画环境
+            var ogc = oc.getContext("2d");//舞台
+            ogc.beginPath();
+            for (var i = 0; i < 60; i++) {
+                ogc.moveTo(200, 200);
+                ogc.arc(200, 200, 150, 6 * i * Math.PI / 180, 6 * (i+1) * Math.PI / 180, false);
+            }
+            ogc.closePath();
+            ogc.stroke();
+
+            //画一个小于外圆的 白色的填充圆
+            ogc.beginPath();
+            ogc.moveTo(200, 200);
+            ogc.fillStyle = "#fff";
+            ogc.arc(200, 200, 150 * 19 / 20, 0, 360 * Math.PI / 180, false);
+            ogc.closePath();
+            ogc.fill();
+
+            //刻度
+            ogc.beginPath();
+            ogc.lineWidth = 3;
+            for (var i = 0; i < 12; i++) {
+                ogc.moveTo(200, 200);
+                ogc.arc(200, 200, 150, 30 * i * Math.PI / 180, 30 * (i + 1) * Math.PI / 180, false);
+            }
+            ogc.closePath();
+            ogc.stroke();
+            //画一个小于外圆的 白色的填充圆
+            ogc.beginPath();
+            ogc.moveTo(200, 200);
+            ogc.fillStyle = "#fff";
+            ogc.arc(200, 200, 150 * 18 / 20, 0, 360 * Math.PI / 180, false);
+            ogc.closePath();
+            ogc.fill();
+            //画数字
+            var deg = 2 * Math.PI / 12;//弧度=角度*Math.PI/180;
+            ogc.save();
+            ogc.beginPath();
+            ogc.translate(200, 200);
+            for (var i = 1; i < 13; i++) {
+                var x1 = Math.sin(i * deg);//正弦
+                var y1 = -Math.cos(i * deg);//余弦
+                ogc.fillStyle = "black";//字体颜色
+                ogc.font = "noraml 30px Calibri";//字体颜色
+                ogc.textAlign = 'center';
+                ogc.textBaseline = 'middle';
+                ogc.fillText(i, x1 * 120, y1 * 120);//填充 130这个值越大 越显示在圆外面
+            }
+            ogc.closePath();
+            ogc.restore();
+            //时针5 分针3 秒针1
+            ogc.beginPath();
+            ogc.lineWidth = 5;
+            ogc.moveTo(200, 200);
+            ogc.arc(200, 200, 150 * 9 / 20, oHoursValue, oHoursValue, false);
+            ogc.closePath();
+            ogc.stroke();
+
+            ogc.beginPath();
+            ogc.lineWidth = 3;
+            ogc.moveTo(200, 200);
+            ogc.arc(200, 200, 150 * 13 / 20, oMinValue, oMinValue, false);
+            ogc.closePath();
+            ogc.stroke();
+
+            ogc.beginPath();
+            ogc.lineWidth = 1;
+            ogc.moveTo(200, 200);
+            ogc.arc(200, 200, 150 * 17 / 20, oSecValue, oSecValue, false);
+            ogc.closePath();
+            ogc.stroke();
+
+        }
+    </script>
+</head>
+<body>
+    <canvas id="myCan" width="400" height="400"></canvas>
+</body>
+</html>
